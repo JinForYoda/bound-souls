@@ -1,3 +1,4 @@
+import { assetUrl } from "../app/assetUrl";
 import { ControlButton } from "./ControlButton";
 
 interface LoadingScreenProps {
@@ -30,7 +31,7 @@ export function LoadingScreen({
 
         <div className="relative z-10 mx-auto mb-6 flex aspect-square w-[min(78vw,320px)] items-center justify-center rounded-full border border-white/15 bg-[radial-gradient(circle_at_35%_35%,rgba(255,247,214,0.95),rgba(255,197,111,0.72)_38%,rgba(44,28,16,0.16)_72%),radial-gradient(circle_at_65%_70%,rgba(205,191,255,0.8),transparent_55%)] shadow-[0_0_40px_rgba(240,181,109,0.18)] animate-[loading-pulse_1.8s_ease-in-out_infinite]">
           <img
-            src="/assets/logo.png"
+            src={assetUrl("assets/logo.png")}
             alt=""
             className="h-[74%] w-[74%] object-contain drop-shadow-[0_0_12px_rgba(255,250,239,0.28)]"
           />

@@ -1,3 +1,4 @@
+import { assetUrl } from "../app/assetUrl";
 import { Badge } from "./Badge";
 
 export function AppHeader() {
@@ -7,7 +8,7 @@ export function AppHeader() {
 
       <div className="relative z-10 flex flex-col items-center px-5 py-5 text-center sm:px-6">
         <img
-          src="/assets/logo.png"
+          src={assetUrl("assets/logo.png")}
           alt="Bound Souls logo"
           className="size-32 object-contain p-4 drop-shadow-[0_0_18px_rgba(240,181,109,0.14)]"
         />
