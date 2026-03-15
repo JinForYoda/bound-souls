@@ -6,11 +6,13 @@ Bound Souls is a small browser puzzle game about guiding two tethered souls thro
 
 - Dual-world puzzle gameplay rendered on a single canvas
 - Turn-based tile movement with smooth step animation
-- Data-driven levels
+- Data-driven levels built from `LevelSymbol` layouts
+- Five handcrafted chambers with increasing minimum solution length
 - Local progress persistence with `localStorage`
 - Pure game logic separated from React components
 - Canvas renderer isolated from game rules
-- Unit tests for level parsing, movement, tile semantics, and world objects
+- Asset preload gate with a dedicated loading screen
+- Unit tests for level parsing, movement, symbol semantics, and win conditions
 
 ## Stack
 
@@ -23,6 +25,7 @@ Bound Souls is a small browser puzzle game about guiding two tethered souls thro
 - Zustand
 - Tailwind CSS 4
 - Vitest
+- Prettier
 
 ## Gameplay
 
@@ -52,6 +55,15 @@ bun run preview
 bun run test
 ```
 
+## Utilities
+
+```bash
+bun run solve:levels
+bun run solve:levels sanctum-knot
+bun run format
+bun run format:check
+```
+
 ## Project Structure
 
 ```text
@@ -73,8 +85,9 @@ src/
 - `src/game/levels` contains declarative level data and parsing
 - `src/store` manages session and progression state
 - `src/ui` contains the React shell around the game canvas
+- `scripts/level-solver.ts` validates solvability and reports minimum solutions
 
-Tiles and world objects are modeled separately so terrain and interactive entities can evolve independently.
+Levels use `LevelSymbol` as the main semantic source of truth, and `DualWorldRenderer` stays agnostic by drawing from external symbol/player render definitions.
 
 ## License
 
