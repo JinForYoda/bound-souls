@@ -6,16 +6,8 @@ describe("tileBehaviors", () => {
   const level = parseLevel({
     id: "tile-rules",
     name: "Tile Rules",
-    light: [
-      "#####",
-      "#P.E#",
-      "#####",
-    ],
-    shadow: [
-      "#####",
-      "#P.E#",
-      "#####",
-    ],
+    light: ["#####", "#P.E#", "#####"],
+    shadow: ["#####", "#P.E#", "#####"],
   });
 
   it("allows entering empty tiles", () => {

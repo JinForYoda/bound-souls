@@ -7,16 +7,8 @@ describe("parseLevel", () => {
     const level = parseLevel({
       id: "parser-smoke",
       name: "Parser Smoke",
-      light: [
-        "#####",
-        "#P.E#",
-        "#####",
-      ],
-      shadow: [
-        "#####",
-        "#P.E#",
-        "#####",
-      ],
+      light: ["#####", "#P.E#", "#####"],
+      shadow: ["#####", "#P.E#", "#####"],
     });
 
     expect(level.width).toBe(5);
@@ -33,16 +25,8 @@ describe("parseLevel", () => {
     const level = parseLevel({
       id: "wall-semantics",
       name: "Wall Semantics",
-      light: [
-        "#####",
-        "#PXE#",
-        "#####",
-      ],
-      shadow: [
-        "#####",
-        "#PXE#",
-        "#####",
-      ],
+      light: ["#####", "#PXE#", "#####"],
+      shadow: ["#####", "#PXE#", "#####"],
     });
 
     expect(level.light.symbols[0][2]).toBe(LevelSymbol.BoundaryWall);
@@ -54,16 +38,8 @@ describe("parseLevel", () => {
       parseLevel({
         id: "bad-size",
         name: "Bad Size",
-        light: [
-          "#####",
-          "#P.E#",
-          "#####",
-        ],
-        shadow: [
-          "####",
-          "#PE#",
-          "####",
-        ],
+        light: ["#####", "#P.E#", "#####"],
+        shadow: ["####", "#PE#", "####"],
       }),
     ).toThrow("worlds must be the same size");
   });
@@ -73,16 +49,8 @@ describe("parseLevel", () => {
       parseLevel({
         id: "bad-start",
         name: "Bad Start",
-        light: [
-          "#####",
-          "#PPE#",
-          "#####",
-        ],
-        shadow: [
-          "#####",
-          "#P.E#",
-          "#####",
-        ],
+        light: ["#####", "#PPE#", "#####"],
+        shadow: ["#####", "#P.E#", "#####"],
       }),
     ).toThrow("contains more than one start");
   });
@@ -92,16 +60,8 @@ describe("parseLevel", () => {
       parseLevel({
         id: "missing-exit",
         name: "Missing Exit",
-        light: [
-          "#####",
-          "#P..#",
-          "#####",
-        ],
-        shadow: [
-          "#####",
-          "#P.E#",
-          "#####",
-        ],
+        light: ["#####", "#P..#", "#####"],
+        shadow: ["#####", "#P.E#", "#####"],
       }),
     ).toThrow("must contain one start and one exit");
   });

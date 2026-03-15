@@ -7,18 +7,8 @@ function buildLevel() {
   return parseLevel({
     id: "test-level",
     name: "Test Level",
-    light: [
-      "#####",
-      "#P.E#",
-      "#...#",
-      "#####",
-    ],
-    shadow: [
-      "#####",
-      "#P.E#",
-      "#...#",
-      "#####",
-    ],
+    light: ["#####", "#P.E#", "#...#", "#####"],
+    shadow: ["#####", "#P.E#", "#...#", "#####"],
   });
 }
 
@@ -41,16 +31,8 @@ describe("movement", () => {
     const level = parseLevel({
       id: "desync-block",
       name: "Desync Block",
-      light: [
-        "#####",
-        "#P.E#",
-        "#####",
-      ],
-      shadow: [
-        "#####",
-        "#P#E#",
-        "#####",
-      ],
+      light: ["#####", "#P.E#", "#####"],
+      shadow: ["#####", "#P#E#", "#####"],
     });
     const session = createSessionState(level);
 
@@ -77,18 +59,8 @@ describe("movement", () => {
     const level = parseLevel({
       id: "custom-starts",
       name: "Custom Starts",
-      light: [
-        "#####",
-        "#..E#",
-        "#P..#",
-        "#####",
-      ],
-      shadow: [
-        "#####",
-        "#P.E#",
-        "#...#",
-        "#####",
-      ],
+      light: ["#####", "#..E#", "#P..#", "#####"],
+      shadow: ["#####", "#P.E#", "#...#", "#####"],
     });
 
     const session = createSessionState(level);

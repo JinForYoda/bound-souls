@@ -6,4 +6,3 @@ export const DIRECTION_VECTORS: Record<Direction, Point> = {
   left: { x: -1, y: 0 },
   right: { x: 1, y: 0 },
 };
-

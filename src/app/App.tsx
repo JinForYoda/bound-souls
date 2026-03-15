@@ -15,7 +15,9 @@ export function App() {
   const totalAssetCount = useGameStore((state) => state.totalAssetCount);
   const assetErrorMessage = useGameStore((state) => state.assetErrorMessage);
   const preloadAssets = useGameStore((state) => state.preloadAssets);
-  const completedLevelCount = useGameStore((state) => state.completedLevelCount);
+  const completedLevelCount = useGameStore(
+    (state) => state.completedLevelCount,
+  );
   const currentLevelIndex = useGameStore((state) => state.currentLevelIndex);
   const session = useGameStore((state) => state.session);
   const restartLevel = useGameStore((state) => state.restartLevel);
@@ -24,7 +26,8 @@ export function App() {
   const goToLevel = useGameStore((state) => state.goToLevel);
   const level = levels[currentLevelIndex];
   const accessibleLevelIndex = Math.min(levels.length - 1, completedLevelCount);
-  const canAdvance = session.status === "won" && currentLevelIndex < levels.length - 1;
+  const canAdvance =
+    session.status === "won" && currentLevelIndex < levels.length - 1;
   const isFinalLevel = currentLevelIndex === levels.length - 1;
 
   useEffect(() => {

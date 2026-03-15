@@ -3,7 +3,9 @@ import type { WorldKey } from "../core/types";
 
 export type PlayerSpriteState = "idle" | "move";
 
-export const symbolAssetUrls: Partial<Record<LevelSymbol, Record<WorldKey, string>>> = {
+export const symbolAssetUrls: Partial<
+  Record<LevelSymbol, Record<WorldKey, string>>
+> = {
   [LevelSymbol.BoundaryWall]: {
     light: "/assets/tiles/light-boundary-wall-tile.png",
     shadow: "/assets/tiles/shadow-boundary-wall-tile.png",
@@ -18,7 +20,10 @@ export const symbolAssetUrls: Partial<Record<LevelSymbol, Record<WorldKey, strin
   },
 };
 
-export const playerSpriteUrls: Record<WorldKey, Record<PlayerSpriteState, string>> = {
+export const playerSpriteUrls: Record<
+  WorldKey,
+  Record<PlayerSpriteState, string>
+> = {
   light: {
     idle: "/assets/characters/light-hero-idle.png",
     move: "/assets/characters/light-hero-move.png",
@@ -30,9 +35,13 @@ export const playerSpriteUrls: Record<WorldKey, Record<PlayerSpriteState, string
 };
 
 function collectUrls(
-  record: Partial<Record<string, Record<string, string>>> | Record<string, Record<string, string>>,
+  record:
+    | Partial<Record<string, Record<string, string>>>
+    | Record<string, Record<string, string>>,
 ): string[] {
-  return Object.values(record).flatMap((group) => (group ? Object.values(group) : []));
+  return Object.values(record).flatMap((group) =>
+    group ? Object.values(group) : [],
+  );
 }
 
 export const runtimeAssetUrls = [

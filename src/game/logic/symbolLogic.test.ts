@@ -18,16 +18,20 @@ describe("symbolLogic", () => {
     expect(symbolLogic[LevelSymbol.BoundaryWall].canEnter).not.toBe(
       symbolLogic[LevelSymbol.Empty].canEnter,
     );
-    expect(symbolLogic[LevelSymbol.BoundaryWall].canEnter({
-      world: buildWorld(LevelSymbol.BoundaryWall),
-      point: { x: 0, y: 0 },
-      symbol: LevelSymbol.BoundaryWall,
-    })).toBe(false);
-    expect(symbolLogic[LevelSymbol.Obstacle].canEnter({
-      world: buildWorld(LevelSymbol.Obstacle),
-      point: { x: 0, y: 0 },
-      symbol: LevelSymbol.Obstacle,
-    })).toBe(false);
+    expect(
+      symbolLogic[LevelSymbol.BoundaryWall].canEnter({
+        world: buildWorld(LevelSymbol.BoundaryWall),
+        point: { x: 0, y: 0 },
+        symbol: LevelSymbol.BoundaryWall,
+      }),
+    ).toBe(false);
+    expect(
+      symbolLogic[LevelSymbol.Obstacle].canEnter({
+        world: buildWorld(LevelSymbol.Obstacle),
+        point: { x: 0, y: 0 },
+        symbol: LevelSymbol.Obstacle,
+      }),
+    ).toBe(false);
   });
 
   it("marks start and exit symbols declaratively", () => {

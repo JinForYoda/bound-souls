@@ -12,6 +12,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && tsc -p tsconfig.node.json --noEmit && vite build",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "preview": "vite preview",
     "solve:levels": "bun run scripts/level-solver.ts",
     "test": "vitest run",
@@ -29,6 +31,7 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.2.0",
     "babel-plugin-react-compiler": "^1.0.0",
+    "prettier": "^3.8.1",
     "tailwindcss": "^4.2.1",
     "typescript": "^5.9.3",
     "vite": "^7.3.1",

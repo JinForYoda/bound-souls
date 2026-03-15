@@ -45,8 +45,14 @@ export function Badge({
       <div
         className={`flex items-center justify-between gap-4 rounded-[18px] border border-white/10 bg-white/[0.025] px-4 py-3 max-sm:flex-col max-sm:items-start ${className}`}
       >
-        <span className={`text-sm text-[rgba(233,223,211,0.72)] ${labelClassName}`}>{label}</span>
-        <strong className={`text-sm uppercase tracking-[0.08em] text-[#fff1cf] ${valueClassName}`}>
+        <span
+          className={`text-sm text-[rgba(233,223,211,0.72)] ${labelClassName}`}
+        >
+          {label}
+        </span>
+        <strong
+          className={`text-sm uppercase tracking-[0.08em] text-[#fff1cf] ${valueClassName}`}
+        >
           {value}
         </strong>
       </div>
@@ -54,11 +60,17 @@ export function Badge({
   }
 
   return (
-    <div className={`rounded-[18px] border border-white/10 bg-white/[0.025] px-3 py-3 ${className}`}>
-      <p className={`text-[0.72rem] uppercase tracking-[0.24em] text-[rgba(233,223,211,0.5)] ${labelClassName}`}>
+    <div
+      className={`rounded-[18px] border border-white/10 bg-white/[0.025] px-3 py-3 ${className}`}
+    >
+      <p
+        className={`text-[0.72rem] uppercase tracking-[0.24em] text-[rgba(233,223,211,0.5)] ${labelClassName}`}
+      >
         {label}
       </p>
-      <p className={`mt-1.5 font-bold text-[#fff1cf] ${valueClassName}`}>{value}</p>
+      <p className={`mt-1.5 font-bold text-[#fff1cf] ${valueClassName}`}>
+        {value}
+      </p>
     </div>
   );
 }

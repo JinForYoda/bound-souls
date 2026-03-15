@@ -12,7 +12,12 @@ export interface EnterContext {
 export type EnterRule = (context: EnterContext) => boolean;
 
 function isInsideBounds({ world, point }: EnterContext): boolean {
-  return point.x >= 0 && point.y >= 0 && point.x < world.width && point.y < world.height;
+  return (
+    point.x >= 0 &&
+    point.y >= 0 &&
+    point.x < world.width &&
+    point.y < world.height
+  );
 }
 
 const worldEntryRules: EnterRule[] = [isInsideBounds];
@@ -22,7 +27,10 @@ function getSymbolAt(world: WorldData, point: Point): LevelSymbol {
   return world.symbols[point.y][point.x];
 }
 
-function createEnterContext(world: WorldData, point: Point): EnterContext | null {
+function createEnterContext(
+  world: WorldData,
+  point: Point,
+): EnterContext | null {
   const boundsContext: EnterContext = {
     world,
     point,
@@ -53,5 +61,8 @@ export function canEnterTile(world: WorldData, point: Point): boolean {
 
   const specificRules = symbolEntryRules[context.symbol] ?? [];
 
-  return context.definition.canEnter(context) && specificRules.every((rule) => rule(context));
+  return (
+    context.definition.canEnter(context) &&
+    specificRules.every((rule) => rule(context))
+  );
 }

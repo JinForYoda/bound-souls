@@ -17,7 +17,9 @@ export function ProgressPanel({
   onSelectLevel,
 }: ProgressPanelProps) {
   const unlockedChamberCount = Math.min(levels.length, completedLevelCount + 1);
-  const completionPercent = Math.round((completedLevelCount / levels.length) * 100);
+  const completionPercent = Math.round(
+    (completedLevelCount / levels.length) * 100,
+  );
 
   return (
     <section>
@@ -48,8 +50,8 @@ export function ProgressPanel({
         ))}
       </div>
       <p className="mt-4 text-[0.92rem] leading-[1.66] text-[rgba(233,223,211,0.72)]">
-        The souls move as one, but the worlds do not mirror each other. If either path is blocked,
-        the step is denied to both.
+        The souls move as one, but the worlds do not mirror each other. If
+        either path is blocked, the step is denied to both.
       </p>
     </section>
   );

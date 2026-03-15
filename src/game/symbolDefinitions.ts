@@ -1,6 +1,9 @@
 import { LevelSymbol } from "./core/levelSymbols";
 import { symbolLogic, type SymbolLogicDefinition } from "./logic/symbolLogic";
-import { symbolRender, type SymbolRenderDefinition } from "./render/symbolRender";
+import {
+  symbolRender,
+  type SymbolRenderDefinition,
+} from "./render/symbolRender";
 
 export interface SymbolDefinition {
   logic: SymbolLogicDefinition;

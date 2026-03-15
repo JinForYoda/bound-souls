@@ -54,10 +54,21 @@ function loadProgress(): ProgressSnapshot {
     const parsed = JSON.parse(raw) as Partial<ProgressSnapshot>;
     const completedLevelCount = Math.max(
       0,
-      Math.min(levels.length, parsed.completedLevelCount ?? (parsed as { unlockedLevelIndex?: number }).unlockedLevelIndex ?? 0),
+      Math.min(
+        levels.length,
+        parsed.completedLevelCount ??
+          (parsed as { unlockedLevelIndex?: number }).unlockedLevelIndex ??
+          0,
+      ),
     );
-    const accessibleLevelIndex = Math.min(levels.length - 1, completedLevelCount);
-    const currentLevelIndex = Math.min(clampIndex(parsed.currentLevelIndex ?? 0), accessibleLevelIndex);
+    const accessibleLevelIndex = Math.min(
+      levels.length - 1,
+      completedLevelCount,
+    );
+    const currentLevelIndex = Math.min(
+      clampIndex(parsed.currentLevelIndex ?? 0),
+      accessibleLevelIndex,
+    );
 
     return {
       currentLevelIndex,
@@ -168,14 +179,20 @@ export const useGameStore = create<GameStore>((set, get) => ({
     } catch (error) {
       set({
         assetStatus: "error",
-        assetErrorMessage: error instanceof Error ? error.message : "Failed to load assets.",
+        assetErrorMessage:
+          error instanceof Error ? error.message : "Failed to load assets.",
       });
     }
   },
   move: (direction) => {
-    const { assetStatus, completedLevelCount, currentLevelIndex, session } = get();
+    const { assetStatus, completedLevelCount, currentLevelIndex, session } =
+      get();
 
-    if (assetStatus !== "ready" || session.animation || session.status === "won") {
+    if (
+      assetStatus !== "ready" ||
+      session.animation ||
+      session.status === "won"
+    ) {
       return;
     }
 
@@ -187,7 +204,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     const nextCompletedLevelCount = result.won
-      ? Math.min(levels.length, Math.max(completedLevelCount, currentLevelIndex + 1))
+      ? Math.min(
+          levels.length,
+          Math.max(completedLevelCount, currentLevelIndex + 1),
+        )
       : completedLevelCount;
 
     set({
@@ -219,7 +239,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    if (performance.now() < session.animation.startedAt + session.animation.durationMs) {
+    if (
+      performance.now() <
+      session.animation.startedAt + session.animation.durationMs
+    ) {
       return;
     }
 
@@ -253,7 +276,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    const accessibleLevelIndex = Math.min(levels.length - 1, completedLevelCount);
+    const accessibleLevelIndex = Math.min(
+      levels.length - 1,
+      completedLevelCount,
+    );
     const nextIndex = currentLevelIndex + 1;
 
     if (nextIndex >= levels.length || nextIndex > accessibleLevelIndex) {
@@ -300,7 +326,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    const accessibleLevelIndex = Math.min(levels.length - 1, completedLevelCount);
+    const accessibleLevelIndex = Math.min(
+      levels.length - 1,
+      completedLevelCount,
+    );
 
     if (index < 0 || index > accessibleLevelIndex || index >= levels.length) {
       return;

@@ -1,4 +1,11 @@
-import type { LevelData, PlayersState, Point, SessionState, WorldData, WorldKey } from "../core/types";
+import type {
+  LevelData,
+  PlayersState,
+  Point,
+  SessionState,
+  WorldData,
+  WorldKey,
+} from "../core/types";
 import { symbolDefinitions } from "../symbolDefinitions";
 import { playerRender } from "./playerRender";
 import { renderConfig, type WorldPalette } from "./renderConfig";
@@ -36,8 +43,20 @@ export class DualWorldRenderer {
     ctx.fillStyle = background;
     ctx.fillRect(0, 0, width, height);
 
-    this.drawAura(ctx, width * 0.24, height * 0.18, 180, "rgba(255, 172, 85, 0.18)");
-    this.drawAura(ctx, width * 0.72, height * 0.83, 210, "rgba(125, 112, 255, 0.18)");
+    this.drawAura(
+      ctx,
+      width * 0.24,
+      height * 0.18,
+      180,
+      "rgba(255, 172, 85, 0.18)",
+    );
+    this.drawAura(
+      ctx,
+      width * 0.72,
+      height * 0.83,
+      210,
+      "rgba(125, 112, 255, 0.18)",
+    );
 
     this.drawWorld(
       ctx,
@@ -70,9 +89,13 @@ export class DualWorldRenderer {
     const labelSpace = panelPadding * 1.3;
     const worldGap = Math.max(56, panelPadding * 2.2);
     const availableWidth = width - panelPadding * 2;
-    const availableHeight = height - panelPadding * 2 - labelSpace * 2 - worldGap;
+    const availableHeight =
+      height - panelPadding * 2 - labelSpace * 2 - worldGap;
     const tileSize = Math.floor(
-      Math.min(availableWidth / level.width, availableHeight / (level.height * 2)),
+      Math.min(
+        availableWidth / level.width,
+        availableHeight / (level.height * 2),
+      ),
     );
     const boardWidth = tileSize * level.width;
     const boardHeight = tileSize * level.height;
@@ -149,7 +172,16 @@ export class DualWorldRenderer {
       }
     }
 
-    this.drawPlayer(ctx, player, originX, originY, layout.tileSize, colors, worldKey, isMoving);
+    this.drawPlayer(
+      ctx,
+      player,
+      originX,
+      originY,
+      layout.tileSize,
+      colors,
+      worldKey,
+      isMoving,
+    );
   }
 
   private drawPlayer(

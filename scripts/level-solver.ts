@@ -1,6 +1,10 @@
 import { levels } from "../src/game/levels";
 import { attemptMove } from "../src/game/logic/movement";
-import type { Direction, LevelData, PlayersState } from "../src/game/core/types";
+import type {
+  Direction,
+  LevelData,
+  PlayersState,
+} from "../src/game/core/types";
 
 const DIRECTIONS: Direction[] = ["up", "down", "left", "right"];
 
@@ -18,7 +22,9 @@ function solveLevel(level: LevelData): SolveResult {
     light: { ...level.light.start },
     shadow: { ...level.shadow.start },
   };
-  const queue: Array<{ players: PlayersState; path: Direction[] }> = [{ players: start, path: [] }];
+  const queue: Array<{ players: PlayersState; path: Direction[] }> = [
+    { players: start, path: [] },
+  ];
   const visited = new Set<string>([createStateKey(start)]);
 
   while (queue.length > 0) {
@@ -72,7 +78,9 @@ function printLevelSolution(level: LevelData): void {
   const solution = solveLevel(level);
 
   if (!solution.path) {
-    console.log(`${level.id}: unsolved (explored ${solution.exploredStates} states)`);
+    console.log(
+      `${level.id}: unsolved (explored ${solution.exploredStates} states)`,
+    );
     return;
   }
 

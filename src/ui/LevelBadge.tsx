@@ -6,7 +6,13 @@ interface LevelBadgeProps {
   onClick: () => void;
 }
 
-export function LevelBadge({ index, active, completed, locked, onClick }: LevelBadgeProps) {
+export function LevelBadge({
+  index,
+  active,
+  completed,
+  locked,
+  onClick,
+}: LevelBadgeProps) {
   const stateClassName = active
     ? "border-[rgba(240,181,109,0.4)] bg-[rgba(40,27,20,0.5)] text-[#fff1cf] shadow-[0_0_22px_rgba(240,181,109,0.18)]"
     : completed

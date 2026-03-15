@@ -16,7 +16,9 @@ export function LoadingScreen({
   onRetry,
 }: LoadingScreenProps) {
   const progressPercent =
-    totalAssetCount === 0 ? 100 : Math.round((loadedAssetCount / totalAssetCount) * 100);
+    totalAssetCount === 0
+      ? 100
+      : Math.round((loadedAssetCount / totalAssetCount) * 100);
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#07070b] px-4 py-5 text-[#f5ecdf] sm:px-5 sm:py-6 lg:px-6">
@@ -26,12 +28,12 @@ export function LoadingScreen({
       <div className="relative w-full max-w-3xl overflow-hidden rounded-[28px] border border-white/10 bg-[rgba(22,18,24,0.88)] px-5 py-6 text-center shadow-[0_24px_80px_rgba(0,0,0,0.42)] backdrop-blur-xl sm:px-6 sm:py-7">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_10%,rgba(255,244,226,0.05),transparent_26%),linear-gradient(135deg,rgba(240,181,109,0.1),transparent_26%),linear-gradient(315deg,rgba(143,139,232,0.1),transparent_28%)]" />
 
-        <div className="relative z-10 mx-auto mb-6 aspect-square w-[min(78vw,320px)]">
-          <div className="absolute inset-0 rounded-full border border-white/15 shadow-[0_0_40px_rgba(240,181,109,0.18)] animate-[loading-drift-light_3s_ease-in-out_infinite]" />
-          <div className="absolute inset-[22px] rounded-full border border-[#8f8be8]/30 shadow-[0_0_34px_rgba(143,139,232,0.14)] animate-[loading-drift-shadow_2.5s_ease-in-out_infinite]" />
-          <div className="absolute inset-[42px] flex items-center justify-center rounded-full bg-[radial-gradient(circle_at_35%_35%,rgba(255,247,214,0.95),rgba(255,197,111,0.72)_38%,rgba(44,28,16,0.16)_72%),radial-gradient(circle_at_65%_70%,rgba(205,191,255,0.8),transparent_55%)] animate-[loading-pulse_1.8s_ease-in-out_infinite]">
-            <img src="/assets/logo.png" alt="" className="h-[88%] w-[88%] object-contain drop-shadow-[0_0_12px_rgba(255,250,239,0.28)]" />
-          </div>
+        <div className="relative z-10 mx-auto mb-6 flex aspect-square w-[min(78vw,320px)] items-center justify-center rounded-full border border-white/15 bg-[radial-gradient(circle_at_35%_35%,rgba(255,247,214,0.95),rgba(255,197,111,0.72)_38%,rgba(44,28,16,0.16)_72%),radial-gradient(circle_at_65%_70%,rgba(205,191,255,0.8),transparent_55%)] shadow-[0_0_40px_rgba(240,181,109,0.18)] animate-[loading-pulse_1.8s_ease-in-out_infinite]">
+          <img
+            src="/assets/logo.png"
+            alt=""
+            className="h-[74%] w-[74%] object-contain drop-shadow-[0_0_12px_rgba(255,250,239,0.28)]"
+          />
         </div>
 
         <p className="relative z-10 text-[0.72rem] uppercase tracking-[0.32em] text-[rgba(233,223,211,0.5)]">
@@ -52,7 +54,9 @@ export function LoadingScreen({
             />
           </div>
           <div className="mt-3 flex items-center justify-between gap-3 text-[0.72rem] uppercase tracking-[0.24em] text-[rgba(233,223,211,0.5)] max-sm:flex-col max-sm:items-start">
-            <span>{assetStatus === "error" ? "Load Failed" : "Preparing Assets"}</span>
+            <span>
+              {assetStatus === "error" ? "Load Failed" : "Preparing Assets"}
+            </span>
             <span>
               {loadedAssetCount} / {totalAssetCount}
             </span>

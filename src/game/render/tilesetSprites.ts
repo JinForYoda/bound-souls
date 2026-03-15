@@ -22,7 +22,10 @@ function getImage(url: string): HTMLImageElement | null {
   return image;
 }
 
-function getSymbolAssetUrl(worldKey: WorldKey, symbol: LevelSymbol): string | null {
+function getSymbolAssetUrl(
+  worldKey: WorldKey,
+  symbol: LevelSymbol,
+): string | null {
   return symbolAssetUrls[symbol]?.[worldKey] ?? null;
 }
 

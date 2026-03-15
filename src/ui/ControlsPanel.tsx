@@ -14,7 +14,8 @@ export function ControlsPanel() {
           <Badge label="Reset" value="R" variant="row" />
         </div>
         <p className="mt-4 text-[0.92rem] leading-[1.66] text-[rgba(233,223,211,0.72)]">
-          Both souls attempt the same step. If either path is sealed, the chamber denies the move.
+          Both souls attempt the same step. If either path is sealed, the
+          chamber denies the move.
         </p>
       </div>
     </div>

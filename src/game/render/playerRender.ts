@@ -19,7 +19,8 @@ export interface PlayerRenderDefinition {
 function createPlayerRenderer(worldKey: WorldKey): PlayerRenderDefinition {
   return {
     draw(context) {
-      const { ctx, player, originX, originY, tileSize, colors, isMoving } = context;
+      const { ctx, player, originX, originY, tileSize, colors, isMoving } =
+        context;
       const centerX = originX + (player.x + 0.5) * tileSize;
       const baseY = originY + (player.y + 1) * tileSize;
       const spriteHeight = tileSize * 1.18;

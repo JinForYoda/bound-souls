@@ -38,7 +38,13 @@ function drawGridOutline(
   ctx.strokeRect(tileX + 0.5, tileY + 0.5, tileSize - 1, tileSize - 1);
 }
 
-function drawFloorSymbol({ ctx, tileX, tileY, tileSize, colors }: SymbolRenderContext): void {
+function drawFloorSymbol({
+  ctx,
+  tileX,
+  tileY,
+  tileSize,
+  colors,
+}: SymbolRenderContext): void {
   drawBaseTile(ctx, tileX, tileY, tileSize, colors.floor);
 }
 
