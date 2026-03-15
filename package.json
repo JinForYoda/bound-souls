@@ -13,6 +13,7 @@
     "dev": "vite",
     "build": "tsc --noEmit && tsc -p tsconfig.node.json --noEmit && vite build",
     "preview": "vite preview",
+    "solve:levels": "bun run scripts/level-solver.ts",
     "test": "vitest run",
     "test:watch": "vitest"
   },
