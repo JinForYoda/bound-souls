@@ -21,8 +21,8 @@ export function App() {
 
   return (
     <div className="min-h-screen">
-      <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 py-6 sm:px-6 lg:px-8">
-        <header className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+      <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 py-4 sm:px-6 sm:py-5 lg:px-8 lg:py-6">
+        <header className="mb-6 flex flex-col gap-3 lg:mb-5">
           <div className="max-w-2xl">
             <h1 className="font-display text-5xl leading-none text-stone-100 sm:text-6xl">
               Bound Souls
@@ -31,15 +31,16 @@ export function App() {
               Guide two tethered souls through warm light and cold shadow. Every step demands perfect accord between both worlds.
             </p>
           </div>
-
-          <div className="panel-surface rounded-[1.75rem] px-5 py-4">
-            <p className="text-xs uppercase tracking-[0.24em] text-stone-400">Controls</p>
-            <p className="mt-2 text-sm text-stone-200">WASD or arrow keys to move. R to restart.</p>
-          </div>
         </header>
 
-        <main className="grid flex-1 gap-6 lg:grid-cols-[320px,minmax(0,1fr)]">
-          <section className="space-y-5">
+        <main className="grid flex-1 items-start gap-6 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-8">
+          <section className="order-2 space-y-5 lg:order-1">
+            <div className="mx-auto w-full max-w-4xl">
+              <GameCanvas level={level} session={session} />
+            </div>
+          </section>
+
+          <aside className="order-1 space-y-5 lg:order-2 lg:sticky lg:top-6">
             <div className="panel-surface rounded-[2rem] p-5 shadow-panel">
               <p className="text-xs uppercase tracking-[0.24em] text-stone-400">Current Level</p>
               <h2 className="mt-3 text-2xl font-semibold text-stone-50">
@@ -85,6 +86,13 @@ export function App() {
             </div>
 
             <div className="panel-surface rounded-[2rem] p-5 shadow-panel">
+              <p className="text-xs uppercase tracking-[0.24em] text-stone-400">Controls</p>
+              <p className="mt-3 text-sm leading-6 text-stone-200">
+                Move with WASD or the arrow keys. Press R to restart the chamber.
+              </p>
+            </div>
+
+            <div className="panel-surface rounded-[2rem] p-5 shadow-panel">
               <p className="text-xs uppercase tracking-[0.24em] text-stone-400">Progress</p>
               <div className="mt-4 flex flex-wrap gap-3">
                 {levels.map((entry, index) => (
@@ -101,11 +109,7 @@ export function App() {
                 The souls move as one, but the worlds do not mirror each other. If either path is blocked, the step is denied to both.
               </p>
             </div>
-          </section>
-
-          <section className="min-w-0">
-            <GameCanvas level={level} session={session} />
-          </section>
+          </aside>
         </main>
       </div>
     </div>
