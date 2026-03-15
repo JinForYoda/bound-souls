@@ -33,7 +33,7 @@ export function GameSidebar({
   const level = levels[currentLevelIndex];
 
   return (
-    <aside className="order-1 space-y-5 lg:order-2 lg:sticky lg:top-6">
+    <aside className="flex flex-col gap-5 lg:sticky lg:top-6">
       <LevelOverviewPanel
         currentLevelIndex={currentLevelIndex}
         levelName={level.name}

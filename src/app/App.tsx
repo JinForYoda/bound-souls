@@ -44,13 +44,17 @@ export function App() {
   }
 
   return (
-    <div className="min-h-screen">
-      <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 py-4 sm:px-6 sm:py-5 lg:px-8 lg:py-6">
+    <div className="relative min-h-screen overflow-hidden bg-[#07070b] text-[#f5ecdf]">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(228,154,84,0.16),transparent_24%),radial-gradient(circle_at_top_right,rgba(119,109,220,0.16),transparent_26%),radial-gradient(circle_at_bottom,rgba(48,41,58,0.7),transparent_42%),linear-gradient(180deg,#07070b_0%,#0b0a10_38%,#121017_100%)]" />
+      <div className="pointer-events-none absolute inset-0 opacity-45 [background-image:linear-gradient(rgba(255,255,255,0.018)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.018)_1px,transparent_1px)] [background-size:34px_34px] [mask-image:radial-gradient(circle_at_center,black_35%,transparent_88%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_14%_20%,rgba(240,181,109,0.08),transparent_26%),radial-gradient(circle_at_84%_24%,rgba(143,139,232,0.08),transparent_30%),radial-gradient(circle_at_50%_0%,rgba(255,245,230,0.08),transparent_20%),linear-gradient(180deg,transparent,rgba(0,0,0,0.28))]" />
+
+      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1310px] flex-col px-4 py-4 sm:px-6 sm:py-5 lg:px-6 lg:py-6">
         <AppHeader />
 
-        <main className="grid flex-1 items-start gap-6 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-8">
-          <section className="order-2 space-y-5 lg:order-1">
-            <div className="mx-auto w-full max-w-4xl">
+        <main className="grid flex-1 items-start gap-6 lg:grid-cols-[minmax(0,920px)_360px] lg:justify-center lg:gap-8">
+          <section className="min-w-0">
+            <div className="w-full">
               <GameCanvas level={level} session={session} />
             </div>
           </section>

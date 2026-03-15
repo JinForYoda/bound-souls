@@ -7,6 +7,7 @@ import { runtimeAssetUrls } from "../game/render/assetManifest";
 
 const STORAGE_KEY = "bound-souls-progress";
 const MOVE_DURATION_MS = 150;
+const ASSET_LOAD_DELAY_MS = 300;
 
 interface ProgressSnapshot {
   currentLevelIndex: number;
@@ -117,6 +118,12 @@ function loadImageAsset(url: string, onLoaded: () => void): Promise<void> {
   });
 }
 
+function wait(ms: number): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
 export const useGameStore = create<GameStore>((set, get) => ({
   ...initialProgress,
   assetStatus: "idle",
@@ -141,16 +148,18 @@ export const useGameStore = create<GameStore>((set, get) => ({
     try {
       let loaded = 0;
 
-      await Promise.all(
-        runtimeAssetUrls.map((url) =>
-          loadImageAsset(url, () => {
-            loaded += 1;
-            set({
-              loadedAssetCount: loaded,
-            });
-          }),
-        ),
-      );
+      for (const [index, url] of runtimeAssetUrls.entries()) {
+        if (index > 0) {
+          await wait(ASSET_LOAD_DELAY_MS);
+        }
+
+        await loadImageAsset(url, () => {
+          loaded += 1;
+          set({
+            loadedAssetCount: loaded,
+          });
+        });
+      }
 
       set({
         assetStatus: "ready",

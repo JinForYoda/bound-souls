@@ -63,20 +63,14 @@ export class DualWorldRenderer {
       renderConfig.palettes.shadow,
       session.animation !== null,
     );
-
-    ctx.strokeStyle = renderConfig.divider;
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(layout.lightX, layout.shadowY - layout.panelPadding * 0.65);
-    ctx.lineTo(layout.lightX + layout.boardWidth, layout.shadowY - layout.panelPadding * 0.65);
-    ctx.stroke();
   }
 
   private getLayout(level: LevelData, width: number, height: number): Layout {
     const panelPadding = Math.max(18, Math.min(width, height) * 0.03);
     const labelSpace = panelPadding * 1.3;
+    const worldGap = Math.max(56, panelPadding * 2.2);
     const availableWidth = width - panelPadding * 2;
-    const availableHeight = height - panelPadding * 2 - labelSpace * 2 - panelPadding;
+    const availableHeight = height - panelPadding * 2 - labelSpace * 2 - worldGap;
     const tileSize = Math.floor(
       Math.min(availableWidth / level.width, availableHeight / (level.height * 2)),
     );
@@ -85,7 +79,7 @@ export class DualWorldRenderer {
     const lightX = Math.floor((width - boardWidth) / 2);
     const lightY = panelPadding + labelSpace;
     const shadowX = lightX;
-    const shadowY = lightY + boardHeight + labelSpace + panelPadding;
+    const shadowY = lightY + boardHeight + labelSpace + worldGap;
 
     return {
       tileSize,
@@ -142,9 +136,9 @@ export class DualWorldRenderer {
     ctx.beginPath();
     ctx.roundRect(
       originX - frameInset,
-      originY - frameInset - 26,
+      originY - frameInset,
       layout.boardWidth + frameInset * 2,
-      layout.boardHeight + frameInset * 2 + 30,
+      layout.boardHeight + frameInset * 2,
       24,
     );
     ctx.fill();
@@ -153,7 +147,7 @@ export class DualWorldRenderer {
 
     ctx.fillStyle = colors.label;
     ctx.font = `700 ${Math.max(12, layout.tileSize * 0.34)}px "Space Grotesk", sans-serif`;
-    ctx.fillText(title, originX, originY - 18);
+    ctx.fillText(title, originX, originY - frameInset - 12);
 
     for (let y = 0; y < world.height; y += 1) {
       for (let x = 0; x < world.width; x += 1) {
