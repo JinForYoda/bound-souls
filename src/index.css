@@ -1,0 +1,61 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Space+Grotesk:wght@400;500;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  --bg-start: #05060b;
+  --bg-mid: #0b0d14;
+  --bg-end: #141320;
+  --panel-border: rgba(255, 255, 255, 0.08);
+  --text-main: #f4efe7;
+  --text-soft: rgba(244, 239, 231, 0.72);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text-main);
+  font-family: "Space Grotesk", sans-serif;
+  background:
+    radial-gradient(circle at top, rgba(255, 170, 96, 0.16), transparent 28%),
+    radial-gradient(circle at bottom, rgba(114, 97, 255, 0.18), transparent 32%),
+    linear-gradient(160deg, var(--bg-start), var(--bg-mid) 45%, var(--bg-end));
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(circle at center, black, transparent 85%);
+}
+
+button {
+  font: inherit;
+}
+
+.panel-surface {
+  border: 1px solid var(--panel-border);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
+    rgba(17, 20, 29, 0.88);
+  backdrop-filter: blur(20px);
+}
+
