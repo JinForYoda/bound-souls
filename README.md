@@ -14,12 +14,14 @@ Bound Souls is a small browser puzzle game about guiding two tethered souls thro
 
 ## Stack
 
-- React
+- Bun
+- React 19
+- React Compiler
 - TypeScript
 - Vite
 - Canvas API
 - Zustand
-- Tailwind CSS
+- Tailwind CSS 4
 - Vitest
 
 ## Gameplay
@@ -33,21 +35,21 @@ Bound Souls is a small browser puzzle game about guiding two tethered souls thro
 ## Run Locally
 
 ```bash
-npm install
-npm run dev
+bun install
+bun run dev
 ```
 
 ## Build
 
 ```bash
-npm run build
-npm run preview
+bun run build
+bun run preview
 ```
 
 ## Tests
 
 ```bash
-npm test
+bun run test
 ```
 
 ## Project Structure
@@ -73,16 +75,6 @@ src/
 - `src/ui` contains the React shell around the game canvas
 
 Tiles and world objects are modeled separately so terrain and interactive entities can evolve independently.
-
-## Deployment
-
-The project is ready for static hosting:
-
-- GitHub Pages
-- Vercel
-- Netlify
-
-GitHub Pages deployment is configured through GitHub Actions.
 
 ## License
 

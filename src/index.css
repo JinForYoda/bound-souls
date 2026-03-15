@@ -1,8 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Space+Grotesk:wght@400;500;700&display=swap");
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 :root {
   color-scheme: dark;
@@ -12,6 +9,13 @@
   --panel-border: rgba(255, 255, 255, 0.08);
   --text-main: #f4efe7;
   --text-soft: rgba(244, 239, 231, 0.72);
+}
+
+@theme {
+  --color-ink: #09090f;
+  --font-sans: "Space Grotesk", sans-serif;
+  --font-display: "Cormorant Garamond", serif;
+  --shadow-panel: 0 18px 80px rgba(0, 0, 0, 0.45);
 }
 
 * {
@@ -58,4 +62,3 @@ button {
     rgba(17, 20, 29, 0.88);
   backdrop-filter: blur(20px);
 }
-
