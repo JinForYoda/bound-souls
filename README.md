@@ -2,8 +2,6 @@
 
 Bound Souls is a small browser puzzle game about guiding two tethered souls through mirrored but unequal worlds. One move affects both worlds at once, and a step only succeeds when both souls can advance together.
 
-Built as a static frontend portfolio project with a focus on clean architecture, testable game logic, and a polished MVP scope.
-
 ## Highlights
 
 - Dual-world puzzle gameplay rendered on a single canvas
@@ -89,4 +87,3 @@ GitHub Pages deployment is configured through GitHub Actions.
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
-
