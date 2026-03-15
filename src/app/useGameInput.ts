@@ -23,6 +23,10 @@ export function useGameInput(): void {
         return;
       }
 
+      if (event.metaKey || event.ctrlKey || event.altKey) {
+        return;
+      }
+
       const direction = keyToDirection[event.code];
 
       if (direction) {
@@ -44,4 +48,3 @@ export function useGameInput(): void {
     };
   }, [move, restartLevel]);
 }
-

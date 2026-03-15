@@ -24,7 +24,6 @@ export function App() {
       <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 py-6 sm:px-6 lg:px-8">
         <header className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl">
-            <p className="text-sm uppercase tracking-[0.28em] text-stone-400">Portfolio MVP</p>
             <h1 className="font-display text-5xl leading-none text-stone-100 sm:text-6xl">
               Bound Souls
             </h1>
