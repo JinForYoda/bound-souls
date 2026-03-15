@@ -101,16 +101,14 @@ export function GameCanvas({ level, session }: GameCanvasProps) {
   return (
     <div
       ref={wrapperRef}
-      className="relative overflow-hidden rounded-[28px] border border-white/10 bg-[rgba(14,12,18,0.9)] p-3 shadow-[0_24px_80px_rgba(0,0,0,0.42)] backdrop-blur-xl"
+      className="relative overflow-hidden rounded-[28px] border border-white/10 bg-[rgba(14,12,18,0.9)] shadow-[0_24px_80px_rgba(0,0,0,0.42)] backdrop-blur-xl"
     >
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(240,181,109,0.06),transparent_26%),linear-gradient(315deg,rgba(143,139,232,0.08),transparent_28%)]" />
-      <div className="relative z-10 overflow-hidden rounded-[20px] border border-white/10 bg-[linear-gradient(180deg,rgba(6,6,9,0.96),rgba(15,13,18,0.96))]">
-        <canvas
-          ref={canvasRef}
-          className="block w-full"
-          aria-label="Bound Souls game board"
-        />
-      </div>
+      <canvas
+        ref={canvasRef}
+        className="relative z-10 block w-full rounded-[28px]"
+        aria-label="Bound Souls game board"
+      />
     </div>
   );
 }

@@ -8,7 +8,6 @@ export interface WorldPalette {
 export const renderConfig = {
   backdropTop: "#080a10",
   backdropBottom: "#14111b",
-  frame: "rgba(255, 255, 255, 0.08)",
   gridLine: "rgba(255, 255, 255, 0.05)",
   divider: "rgba(255, 255, 255, 0.1)",
   palettes: {

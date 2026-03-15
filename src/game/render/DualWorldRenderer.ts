@@ -127,27 +127,9 @@ export class DualWorldRenderer {
     colors: WorldPalette,
     isMoving: boolean,
   ): void {
-    const frameInset = Math.max(12, layout.tileSize * 0.28);
-
-    ctx.save();
-    ctx.fillStyle = "rgba(255, 255, 255, 0.03)";
-    ctx.strokeStyle = renderConfig.frame;
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.roundRect(
-      originX - frameInset,
-      originY - frameInset,
-      layout.boardWidth + frameInset * 2,
-      layout.boardHeight + frameInset * 2,
-      24,
-    );
-    ctx.fill();
-    ctx.stroke();
-    ctx.restore();
-
     ctx.fillStyle = colors.label;
     ctx.font = `700 ${Math.max(12, layout.tileSize * 0.34)}px "Space Grotesk", sans-serif`;
-    ctx.fillText(title, originX, originY - frameInset - 12);
+    ctx.fillText(title, originX, originY - Math.max(8, layout.tileSize * 0.18));
 
     for (let y = 0; y < world.height; y += 1) {
       for (let x = 0; x < world.width; x += 1) {
