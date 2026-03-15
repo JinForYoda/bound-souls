@@ -22,7 +22,7 @@ describe("tileBehaviors", () => {
     expect(canEnterTile(level.light, { x: 2, y: 1 })).toBe(true);
   });
 
-  it("allows entering tiles that contain world objects", () => {
+  it("allows entering exit symbols", () => {
     expect(canEnterTile(level.light, { x: 3, y: 1 })).toBe(true);
   });
 

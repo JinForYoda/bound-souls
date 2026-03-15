@@ -1,5 +1,4 @@
-import { TileType } from "../core/types";
-import { WorldObjectType } from "../core/types";
+import { LevelSymbol } from "../core/levelSymbols";
 import { describe, expect, it } from "vitest";
 import { parseLevel } from "./parseLevel";
 
@@ -23,12 +22,31 @@ describe("parseLevel", () => {
     expect(level.width).toBe(5);
     expect(level.height).toBe(3);
     expect(level.light.start).toEqual({ x: 1, y: 1 });
-    expect(level.shadow.objects[0]).toEqual({
-      type: WorldObjectType.Exit,
-      position: { x: 3, y: 1 },
+    expect(level.shadow.exit).toEqual({ x: 3, y: 1 });
+    expect(level.light.symbols[0][0]).toBe(LevelSymbol.BoundaryWall);
+    expect(level.light.symbols[1][1]).toBe(LevelSymbol.Start);
+    expect(level.light.symbols[1][2]).toBe(LevelSymbol.Empty);
+    expect(level.light.symbols[1][3]).toBe(LevelSymbol.Exit);
+  });
+
+  it("preserves declared wall and obstacle symbols in the parsed world grid", () => {
+    const level = parseLevel({
+      id: "wall-semantics",
+      name: "Wall Semantics",
+      light: [
+        "#####",
+        "#PXE#",
+        "#####",
+      ],
+      shadow: [
+        "#####",
+        "#PXE#",
+        "#####",
+      ],
     });
-    expect(level.light.tiles[1][2]).toBe(TileType.Empty);
-    expect(level.light.tiles[1][3]).toBe(TileType.Empty);
+
+    expect(level.light.symbols[0][2]).toBe(LevelSymbol.BoundaryWall);
+    expect(level.light.symbols[1][2]).toBe(LevelSymbol.Obstacle);
   });
 
   it("throws when worlds have different dimensions", () => {

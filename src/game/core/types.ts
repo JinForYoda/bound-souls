@@ -1,11 +1,4 @@
-export enum TileType {
-  Empty = "empty",
-  Wall = "wall",
-}
-
-export enum WorldObjectType {
-  Exit = "exit",
-}
+import type { LevelSymbol } from "./levelSymbols";
 
 export type Direction = "up" | "down" | "left" | "right";
 
@@ -17,16 +10,11 @@ export interface Point {
 }
 
 export interface WorldData {
-  tiles: TileType[][];
+  symbols: LevelSymbol[][];
   start: Point;
-  objects: WorldObject[];
+  exit: Point;
   width: number;
   height: number;
-}
-
-export interface WorldObject {
-  type: WorldObjectType;
-  position: Point;
 }
 
 export interface LevelData {

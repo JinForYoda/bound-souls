@@ -1,12 +1,12 @@
-import { getTileDefinition } from "../core/tileDefinitions";
-import { TileType } from "../core/types";
+import { LevelSymbol } from "../core/levelSymbols";
 import type { Point, WorldData } from "../core/types";
+import { symbolLogic, type SymbolLogicDefinition } from "./symbolLogic";
 
 export interface EnterContext {
   world: WorldData;
   point: Point;
-  tile: TileType;
-  definition: ReturnType<typeof getTileDefinition>;
+  symbol: LevelSymbol;
+  definition: SymbolLogicDefinition;
 }
 
 export type EnterRule = (context: EnterContext) => boolean;
@@ -15,37 +15,32 @@ function isInsideBounds({ world, point }: EnterContext): boolean {
   return point.x >= 0 && point.y >= 0 && point.x < world.width && point.y < world.height;
 }
 
-function respectsMovementBlocking({ definition }: EnterContext): boolean {
-  return !definition.blocksMovement;
-}
-
 const worldEntryRules: EnterRule[] = [isInsideBounds];
+const symbolEntryRules: Partial<Record<LevelSymbol, EnterRule[]>> = {};
 
-const tileEntryRules: Partial<Record<TileType, EnterRule[]>> = {};
-
-function getTileAt(world: WorldData, point: Point): TileType {
-  return world.tiles[point.y][point.x];
+function getSymbolAt(world: WorldData, point: Point): LevelSymbol {
+  return world.symbols[point.y][point.x];
 }
 
 function createEnterContext(world: WorldData, point: Point): EnterContext | null {
   const boundsContext: EnterContext = {
     world,
     point,
-    tile: TileType.Empty,
-    definition: getTileDefinition(TileType.Empty),
+    symbol: LevelSymbol.Empty,
+    definition: symbolLogic[LevelSymbol.Empty],
   };
 
   if (!worldEntryRules.every((rule) => rule(boundsContext))) {
     return null;
   }
 
-  const tile = getTileAt(world, point);
+  const symbol = getSymbolAt(world, point);
 
   return {
     world,
     point,
-    tile,
-    definition: getTileDefinition(tile),
+    symbol,
+    definition: symbolLogic[symbol],
   };
 }
 
@@ -56,7 +51,7 @@ export function canEnterTile(world: WorldData, point: Point): boolean {
     return false;
   }
 
-  const specificRules = tileEntryRules[context.tile] ?? [];
+  const specificRules = symbolEntryRules[context.symbol] ?? [];
 
-  return respectsMovementBlocking(context) && specificRules.every((rule) => rule(context));
+  return context.definition.canEnter(context) && specificRules.every((rule) => rule(context));
 }

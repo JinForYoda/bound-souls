@@ -1,6 +1,6 @@
-import { TileType, WorldObjectType } from "../core/types";
-import type { LevelData, Point, WorldData, WorldObject } from "../core/types";
-import { LevelSymbol, symbolToTileType } from "./levelSymbols";
+import { isLevelSymbol, LevelSymbol } from "../core/levelSymbols";
+import type { LevelData, Point, WorldData } from "../core/types";
+import { symbolLogic } from "../logic/symbolLogic";
 
 export interface RawLevelDefinition {
   id: string;
@@ -13,49 +13,49 @@ function parseWorld(rows: string[], worldName: string): WorldData {
   const height = rows.length;
   const width = rows[0]?.length ?? 0;
   let start: Point | null = null;
-  const objects: WorldObject[] = [];
+  let exit: Point | null = null;
 
-  const tiles = rows.map((row, y) => {
+  const symbols = rows.map((row, y) => {
     if (row.length !== width) {
       throw new Error(`${worldName} has inconsistent row widths.`);
     }
 
-    return row.split("").map((symbol, x): TileType => {
-      switch (symbol) {
-        case LevelSymbol.Wall:
-        case LevelSymbol.Empty:
-          return symbolToTileType[symbol];
-        case LevelSymbol.Start:
-          if (start) {
-            throw new Error(`${worldName} contains more than one start.`);
-          }
-
-          start = { x, y };
-          return symbolToTileType[symbol];
-        case LevelSymbol.Exit:
-          if (objects.some((object) => object.type === WorldObjectType.Exit)) {
-            throw new Error(`${worldName} contains more than one exit.`);
-          }
-
-          objects.push({
-            type: WorldObjectType.Exit,
-            position: { x, y },
-          });
-          return symbolToTileType[symbol];
-        default:
-          throw new Error(`${worldName} contains unsupported tile "${symbol}".`);
+    return row.split("").map((value, x): LevelSymbol => {
+      if (!isLevelSymbol(value)) {
+        throw new Error(`${worldName} contains unsupported tile "${value}".`);
       }
+
+      const symbol = value;
+      const definition = symbolLogic[symbol];
+
+      if (definition.isStart) {
+        if (start) {
+          throw new Error(`${worldName} contains more than one start.`);
+        }
+
+        start = { x, y };
+      }
+
+      if (definition.isExit) {
+        if (exit) {
+          throw new Error(`${worldName} contains more than one exit.`);
+        }
+
+        exit = { x, y };
+      }
+
+      return symbol;
     });
   });
 
-  if (!start || objects.every((object) => object.type !== WorldObjectType.Exit)) {
+  if (!start || !exit) {
     throw new Error(`${worldName} must contain one start and one exit.`);
   }
 
   return {
-    tiles,
+    symbols,
     start,
-    objects,
+    exit,
     width,
     height,
   };

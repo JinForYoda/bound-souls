@@ -1,6 +1,6 @@
-import { getTileDefinition, TileRenderVariant } from "../core/tileDefinitions";
-import { getWorldObjectDefinition } from "../core/worldObjectDefinitions";
-import type { LevelData, PlayersState, Point, SessionState, WorldData } from "../core/types";
+import type { LevelData, PlayersState, Point, SessionState, WorldData, WorldKey } from "../core/types";
+import { symbolDefinitions } from "../symbolDefinitions";
+import { playerRender } from "./playerRender";
 import { renderConfig, type WorldPalette } from "./renderConfig";
 
 interface RenderParams {
@@ -46,8 +46,10 @@ export class DualWorldRenderer {
       layout.lightX,
       layout.lightY,
       layout,
+      "light",
       "LIGHT WORLD",
       renderConfig.palettes.light,
+      session.animation !== null,
     );
     this.drawWorld(
       ctx,
@@ -56,8 +58,10 @@ export class DualWorldRenderer {
       layout.shadowX,
       layout.shadowY,
       layout,
+      "shadow",
       "SHADOW WORLD",
       renderConfig.palettes.shadow,
+      session.animation !== null,
     );
 
     ctx.strokeStyle = renderConfig.divider;
@@ -124,8 +128,10 @@ export class DualWorldRenderer {
     originX: number,
     originY: number,
     layout: Layout,
+    worldKey: WorldKey,
     title: string,
     colors: WorldPalette,
+    isMoving: boolean,
   ): void {
     const frameInset = Math.max(12, layout.tileSize * 0.28);
 
@@ -151,20 +157,14 @@ export class DualWorldRenderer {
 
     for (let y = 0; y < world.height; y += 1) {
       for (let x = 0; x < world.width; x += 1) {
-        const tile = world.tiles[y][x];
-        const definition = getTileDefinition(tile);
+        const symbol = world.symbols[y][x];
+        const definition = symbolDefinitions[symbol];
         const tileX = originX + x * layout.tileSize;
         const tileY = originY + y * layout.tileSize;
 
-        ctx.fillStyle = (x + y) % 2 === 0 ? colors.floor : colors.floorAlt;
-        ctx.fillRect(tileX, tileY, layout.tileSize, layout.tileSize);
-
-        ctx.strokeStyle = renderConfig.gridLine;
-        ctx.lineWidth = 1;
-        ctx.strokeRect(tileX + 0.5, tileY + 0.5, layout.tileSize - 1, layout.tileSize - 1);
-
-        renderConfig.tileRecipes[definition.renderVariant].draw({
+        definition.render.draw({
           ctx,
+          worldKey,
           tileX,
           tileY,
           tileSize: layout.tileSize,
@@ -173,27 +173,7 @@ export class DualWorldRenderer {
       }
     }
 
-    for (const object of world.objects) {
-      const definition = getWorldObjectDefinition(object.type);
-      const tileX = originX + object.position.x * layout.tileSize;
-      const tileY = originY + object.position.y * layout.tileSize;
-
-      switch (definition.renderVariant) {
-        case "exit":
-          renderConfig.objectRecipes[definition.renderVariant].draw({
-            ctx,
-            tileX,
-            tileY,
-            tileSize: layout.tileSize,
-            colors,
-          });
-          break;
-        default:
-          break;
-      }
-    }
-
-    this.drawPlayer(ctx, player, originX, originY, layout.tileSize, colors);
+    this.drawPlayer(ctx, player, originX, originY, layout.tileSize, colors, worldKey, isMoving);
   }
 
   private drawPlayer(
@@ -203,29 +183,18 @@ export class DualWorldRenderer {
     originY: number,
     tileSize: number,
     colors: WorldPalette,
+    worldKey: WorldKey,
+    isMoving: boolean,
   ): void {
-    const centerX = originX + (player.x + 0.5) * tileSize;
-    const centerY = originY + (player.y + 0.5) * tileSize;
-    const radius = tileSize * 0.24;
-
-    ctx.save();
-    ctx.shadowBlur = tileSize * 0.8;
-    ctx.shadowColor = colors.glow;
-    ctx.fillStyle = colors.player;
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, radius * 1.35, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
-
-    ctx.fillStyle = colors.playerCore;
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
-    ctx.beginPath();
-    ctx.arc(centerX - radius * 0.28, centerY - radius * 0.3, radius * 0.28, 0, Math.PI * 2);
-    ctx.fill();
+    playerRender[worldKey].draw({
+      ctx,
+      player,
+      originX,
+      originY,
+      tileSize,
+      colors,
+      isMoving,
+    });
   }
 
   private drawAura(
