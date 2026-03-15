@@ -3,17 +3,23 @@ import { levels } from "../game/levels";
 import { attemptMove } from "../game/logic/movement";
 import { createSessionState } from "../game/logic/session";
 import type { Direction, SessionState } from "../game/core/types";
+import { runtimeAssetUrls } from "../game/render/assetManifest";
 
 const STORAGE_KEY = "bound-souls-progress";
 const MOVE_DURATION_MS = 150;
 
 interface ProgressSnapshot {
   currentLevelIndex: number;
-  unlockedLevelIndex: number;
+  completedLevelCount: number;
 }
 
 interface GameStore extends ProgressSnapshot {
+  assetStatus: "idle" | "loading" | "ready" | "error";
+  loadedAssetCount: number;
+  totalAssetCount: number;
+  assetErrorMessage: string | null;
   session: SessionState;
+  preloadAssets: () => Promise<void>;
   move: (direction: Direction) => void;
   completeAnimation: () => void;
   restartLevel: () => void;
@@ -30,7 +36,7 @@ function loadProgress(): ProgressSnapshot {
   if (typeof window === "undefined") {
     return {
       currentLevelIndex: 0,
-      unlockedLevelIndex: 0,
+      completedLevelCount: 0,
     };
   }
 
@@ -40,22 +46,26 @@ function loadProgress(): ProgressSnapshot {
     if (!raw) {
       return {
         currentLevelIndex: 0,
-        unlockedLevelIndex: 0,
+        completedLevelCount: 0,
       };
     }
 
     const parsed = JSON.parse(raw) as Partial<ProgressSnapshot>;
-    const unlockedLevelIndex = clampIndex(parsed.unlockedLevelIndex ?? 0);
-    const currentLevelIndex = Math.min(clampIndex(parsed.currentLevelIndex ?? 0), unlockedLevelIndex);
+    const completedLevelCount = Math.max(
+      0,
+      Math.min(levels.length, parsed.completedLevelCount ?? (parsed as { unlockedLevelIndex?: number }).unlockedLevelIndex ?? 0),
+    );
+    const accessibleLevelIndex = Math.min(levels.length - 1, completedLevelCount);
+    const currentLevelIndex = Math.min(clampIndex(parsed.currentLevelIndex ?? 0), accessibleLevelIndex);
 
     return {
       currentLevelIndex,
-      unlockedLevelIndex,
+      completedLevelCount,
     };
   } catch {
     return {
       currentLevelIndex: 0,
-      unlockedLevelIndex: 0,
+      completedLevelCount: 0,
     };
   }
 }
@@ -70,13 +80,93 @@ function saveProgress(snapshot: ProgressSnapshot): void {
 
 const initialProgress = loadProgress();
 
+function loadImageAsset(url: string, onLoaded: () => void): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (typeof Image === "undefined") {
+      onLoaded();
+      resolve();
+      return;
+    }
+
+    const image = new Image();
+    let settled = false;
+
+    function finish(): void {
+      if (settled) {
+        return;
+      }
+
+      settled = true;
+      onLoaded();
+      resolve();
+    }
+
+    image.onload = () => {
+      finish();
+    };
+
+    image.onerror = () => {
+      reject(new Error(`Failed to load asset: ${url}`));
+    };
+
+    image.src = url;
+
+    if (image.complete && image.naturalWidth > 0) {
+      finish();
+    }
+  });
+}
+
 export const useGameStore = create<GameStore>((set, get) => ({
   ...initialProgress,
+  assetStatus: "idle",
+  loadedAssetCount: 0,
+  totalAssetCount: runtimeAssetUrls.length,
+  assetErrorMessage: null,
   session: createSessionState(levels[initialProgress.currentLevelIndex]),
-  move: (direction) => {
-    const { currentLevelIndex, unlockedLevelIndex, session } = get();
+  preloadAssets: async () => {
+    const { assetStatus } = get();
 
-    if (session.animation || session.status === "won") {
+    if (assetStatus === "loading" || assetStatus === "ready") {
+      return;
+    }
+
+    set({
+      assetStatus: "loading",
+      loadedAssetCount: 0,
+      totalAssetCount: runtimeAssetUrls.length,
+      assetErrorMessage: null,
+    });
+
+    try {
+      let loaded = 0;
+
+      await Promise.all(
+        runtimeAssetUrls.map((url) =>
+          loadImageAsset(url, () => {
+            loaded += 1;
+            set({
+              loadedAssetCount: loaded,
+            });
+          }),
+        ),
+      );
+
+      set({
+        assetStatus: "ready",
+        loadedAssetCount: runtimeAssetUrls.length,
+      });
+    } catch (error) {
+      set({
+        assetStatus: "error",
+        assetErrorMessage: error instanceof Error ? error.message : "Failed to load assets.",
+      });
+    }
+  },
+  move: (direction) => {
+    const { assetStatus, completedLevelCount, currentLevelIndex, session } = get();
+
+    if (assetStatus !== "ready" || session.animation || session.status === "won") {
       return;
     }
 
@@ -87,12 +177,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    const nextUnlockedLevelIndex = result.won
-      ? Math.min(levels.length - 1, Math.max(unlockedLevelIndex, currentLevelIndex + 1))
-      : unlockedLevelIndex;
+    const nextCompletedLevelCount = result.won
+      ? Math.min(levels.length, Math.max(completedLevelCount, currentLevelIndex + 1))
+      : completedLevelCount;
 
     set({
-      unlockedLevelIndex: nextUnlockedLevelIndex,
+      completedLevelCount: nextCompletedLevelCount,
       session: {
         ...session,
         players: result.players,
@@ -110,7 +200,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     saveProgress({
       currentLevelIndex,
-      unlockedLevelIndex: nextUnlockedLevelIndex,
+      completedLevelCount: nextCompletedLevelCount,
     });
   },
   completeAnimation: () => {
@@ -132,7 +222,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
     });
   },
   restartLevel: () => {
-    const { currentLevelIndex, unlockedLevelIndex } = get();
+    const { assetStatus, completedLevelCount, currentLevelIndex } = get();
+
+    if (assetStatus !== "ready") {
+      return;
+    }
 
     set({
       session: createSessionState(levels[currentLevelIndex]),
@@ -140,14 +234,20 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     saveProgress({
       currentLevelIndex,
-      unlockedLevelIndex,
+      completedLevelCount,
     });
   },
   nextLevel: () => {
-    const { currentLevelIndex, unlockedLevelIndex } = get();
+    const { assetStatus, completedLevelCount, currentLevelIndex } = get();
+
+    if (assetStatus !== "ready") {
+      return;
+    }
+
+    const accessibleLevelIndex = Math.min(levels.length - 1, completedLevelCount);
     const nextIndex = currentLevelIndex + 1;
 
-    if (nextIndex >= levels.length || nextIndex > unlockedLevelIndex) {
+    if (nextIndex >= levels.length || nextIndex > accessibleLevelIndex) {
       return;
     }
 
@@ -158,11 +258,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     saveProgress({
       currentLevelIndex: nextIndex,
-      unlockedLevelIndex,
+      completedLevelCount,
     });
   },
   previousLevel: () => {
-    const { currentLevelIndex, unlockedLevelIndex } = get();
+    const { assetStatus, completedLevelCount, currentLevelIndex } = get();
+
+    if (assetStatus !== "ready") {
+      return;
+    }
+
     const previousIndex = currentLevelIndex - 1;
 
     if (previousIndex < 0) {
@@ -176,13 +281,19 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     saveProgress({
       currentLevelIndex: previousIndex,
-      unlockedLevelIndex,
+      completedLevelCount,
     });
   },
   goToLevel: (index) => {
-    const { unlockedLevelIndex } = get();
+    const { assetStatus, completedLevelCount } = get();
 
-    if (index < 0 || index > unlockedLevelIndex || index >= levels.length) {
+    if (assetStatus !== "ready") {
+      return;
+    }
+
+    const accessibleLevelIndex = Math.min(levels.length - 1, completedLevelCount);
+
+    if (index < 0 || index > accessibleLevelIndex || index >= levels.length) {
       return;
     }
 
@@ -193,7 +304,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     saveProgress({
       currentLevelIndex: index,
-      unlockedLevelIndex,
+      completedLevelCount,
     });
   },
 }));

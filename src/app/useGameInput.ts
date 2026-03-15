@@ -14,11 +14,16 @@ const keyToDirection: Record<string, Direction> = {
 };
 
 export function useGameInput(): void {
+  const assetStatus = useGameStore((state) => state.assetStatus);
   const move = useGameStore((state) => state.move);
   const restartLevel = useGameStore((state) => state.restartLevel);
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent): void {
+      if (assetStatus !== "ready") {
+        return;
+      }
+
       if (event.repeat) {
         return;
       }
@@ -46,5 +51,5 @@ export function useGameInput(): void {
     return () => {
       window.removeEventListener("keydown", onKeyDown);
     };
-  }, [move, restartLevel]);
+  }, [assetStatus, move, restartLevel]);
 }
