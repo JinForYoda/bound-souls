@@ -14,6 +14,7 @@ Core stack:
 - Tailwind CSS v4
 - Bun
 - Vitest
+- Prettier
 
 Deployment targets:
 
@@ -139,10 +140,10 @@ Located in:
 
 Contains:
 
-- tile types
-- world object types
+- `LevelSymbol`
+- directions
 - shared data structures
-- semantic definitions for tiles / objects
+- world/session data shapes
 
 ### 2. Level data
 
@@ -153,7 +154,7 @@ Located in:
 Contains:
 
 - raw level definitions
-- parsing from symbolic layouts to typed data
+- parsing from symbolic layouts to world data
 - level-specific content only
 
 ### 3. Pure game logic
@@ -167,7 +168,7 @@ Contains:
 - movement rules
 - collision / passability rules
 - win condition checks
-- tile/object behavior rules
+- symbol behavior rules
 
 This layer should stay pure and testable.
 
@@ -180,11 +181,13 @@ Located in:
 Contains:
 
 - canvas drawing
-- sprite rendering
+- symbol and player render definitions
+- sprite loading / asset manifests
 - palette/render config
 - animation interpolation
 
 This layer should not decide gameplay outcomes.
+`DualWorldRenderer` should stay agnostic of gameplay semantics and render only from external symbol/player definitions and config.
 
 ### 5. App / UI / Store
 
@@ -199,8 +202,20 @@ Contains:
 - React shell
 - controls UI
 - current level UI
+- loading screen / asset preload gate
 - local progress persistence
 - session state orchestration
+
+### 6. Utility scripts
+
+Located in:
+
+- `scripts`
+
+Contains:
+
+- development utilities such as `level-solver`
+- validation helpers that should stay outside runtime code
 
 ---
 
@@ -221,6 +236,7 @@ If you are an LLM working on this project, follow these rules.
 - Keep rendering concerns out of logic modules.
 - Prefer small, direct abstractions over heavy enterprise patterns.
 - Do not introduce `any` when avoidable.
+- Keep `LevelSymbol` as the single semantic source of truth for map content unless a new layer is clearly justified.
 
 ### Preserve the MVP shape
 
@@ -251,7 +267,8 @@ Prefer this order:
 - prefer deterministic visuals over random noisy decoration
 - keep floor/background quiet
 - use sprites where they add clarity and identity
-- use fallback rendering where helpful during migration
+- prefer data-driven symbol/player render definitions over type checks inside the renderer
+- keep `DualWorldRenderer` dumb: it should compose and draw, not infer tile meaning or gameplay rules
 
 ### When touching levels
 
@@ -259,6 +276,7 @@ Prefer this order:
 - challenge should come from synchronization and route planning
 - avoid giant empty maps
 - avoid unreadable wall noise
+- when changing difficulty, preserve solvability and verify with `bun run solve:levels`
 
 ### When touching style
 
@@ -316,6 +334,22 @@ Priority test areas:
 
 Do not rely only on visual checks for gameplay correctness.
 
+When touching level layouts or difficulty:
+
+- run `bun run solve:levels`
+- keep or intentionally adjust the minimum solution length
+- prefer reducing useless state-space without making levels noisy
+
+## Tooling
+
+Useful local commands:
+
+- `bun test`
+- `bun run build`
+- `bun run solve:levels`
+- `bun run format`
+- `bun run format:check`
+
 ---
 
 ## Performance / UX Expectations
@@ -350,4 +384,6 @@ What matters most:
 
 - clean logic
 - readable puzzles
--
+- restrained atmosphere
+- data-driven content
+- small, polished scope
